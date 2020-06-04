@@ -15,13 +15,15 @@ const cardMaker = (data) => {
   const card = document.createElement("div")
   const cardImage = document.createElement("img")
   const infoContainer = document.createElement("div")
-  const name = document.createElement("h2")
+  const name = document.createElement("h3")
   const location = document.createElement("p")
   const profile = document.createElement("p")
+  const profileLink = document.createElement("a")
   const followers = document.createElement("p")
   const following = document.createElement("p")
   const bio = document.createElement("p")
-  const userName = document.createElement("h3")
+  const userName = document.createElement("p")
+  console.log("this is my profile", profileLink)
 
   card.appendChild(cardImage)
   card.appendChild(infoContainer)
@@ -32,7 +34,7 @@ const cardMaker = (data) => {
   infoContainer.appendChild(followers)
   infoContainer.appendChild(following)
   infoContainer.appendChild(bio)
-  
+ 
 
   card.classList.add('card')
   name.classList.add('name')
@@ -41,14 +43,31 @@ const cardMaker = (data) => {
   cardImage.src = data["avatar_url"]
   name.textContent = data.name
   location.textContent = data.location
-  profile.textContent = data.profile
+  profile.textContent = "Profile: "
+  profileLink.textContent = `https://github.com/${data.login}`
+  profileLink.href = `https://github.com/${data.login}`
   followers.textContent = data.followers
   following.textContent = data.following
   bio.textContent = data.bio
   userName.textContent = data.login
 
+  profile.appendChild(profileLink)
+
   document.querySelector(".cards").appendChild(card)
 }
+
+axios
+.get("https://api.github.com/users/stephaniegatt/followers")
+.then(response => {
+  console.log("response", response)
+  response.data.forEach((data) => {
+    axios
+    .get(`https://api.github.com/users/${data.login}`)
+    .then(dataResponse => {
+      cardMaker(dataResponse.data)
+    })
+  })
+})
 
 
 /*
@@ -75,11 +94,18 @@ const cardMaker = (data) => {
     user, and adding that card to the DOM.
 */
 
-const followersArray = ["samanthagatt", "Elisa-Alvarez", "tetondan", "dustinmyers", "bigknell"];
+// const followersArray = ["samanthagatt", "Elisa-Alvarez", "Khalil-Foulks", "dustinmyers", "bigknell"];
 
-followersArray.forEach( (cb) => {
-  
-})
+// followersArray.forEach((data) => {
+//   axios
+//   .get(`https://api.github.com/users/${data}`)
+//   .then(response => {
+//     // debugger
+//     cardMaker(response.data)
+//   }) 
+// })
+
+
 
 
 /*
