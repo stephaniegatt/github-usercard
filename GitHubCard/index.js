@@ -4,6 +4,72 @@
     https://api.github.com/users/<your name>
 */
 
+axios
+  .get("https://api.github.com/users/stephaniegatt")
+  .then(response => {
+    console.log("see response", response);
+    // debugger
+    cardMaker(response.data)
+  })
+const cardMaker = (data) => {
+  const card = document.createElement("div")
+  const cardImage = document.createElement("img")
+  const infoContainer = document.createElement("div")
+  const name = document.createElement("h3")
+  const location = document.createElement("p")
+  const profile = document.createElement("p")
+  const profileLink = document.createElement("a")
+  const followers = document.createElement("p")
+  const following = document.createElement("p")
+  const bio = document.createElement("p")
+  const userName = document.createElement("p")
+  console.log("this is my profile", profileLink)
+
+  card.appendChild(cardImage)
+  card.appendChild(infoContainer)
+  infoContainer.appendChild(name)
+  infoContainer.appendChild(userName)
+  infoContainer.appendChild(location)
+  infoContainer.appendChild(profile)
+  infoContainer.appendChild(followers)
+  infoContainer.appendChild(following)
+  infoContainer.appendChild(bio)
+ 
+
+  card.classList.add('card')
+  name.classList.add('name')
+  userName.classList.add('userName')
+
+  cardImage.src = data["avatar_url"]
+  name.textContent = data.name
+  location.textContent = data.location
+  profile.textContent = "Profile: "
+  profileLink.textContent = `https://github.com/${data.login}`
+  profileLink.href = `https://github.com/${data.login}`
+  followers.textContent = data.followers
+  following.textContent = data.following
+  bio.textContent = data.bio
+  userName.textContent = data.login
+
+  profile.appendChild(profileLink)
+
+  document.querySelector(".cards").appendChild(card)
+}
+
+axios
+.get("https://api.github.com/users/stephaniegatt/followers")
+.then(response => {
+  console.log("response", response)
+  response.data.forEach((data) => {
+    axios
+    .get(`https://api.github.com/users/${data.login}`)
+    .then(dataResponse => {
+      cardMaker(dataResponse.data)
+    })
+  })
+})
+
+
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -28,7 +94,19 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+// const followersArray = ["samanthagatt", "Elisa-Alvarez", "Khalil-Foulks", "dustinmyers", "bigknell"];
+
+// followersArray.forEach((data) => {
+//   axios
+//   .get(`https://api.github.com/users/${data}`)
+//   .then(response => {
+//     // debugger
+//     cardMaker(response.data)
+//   }) 
+// })
+
+
+
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
